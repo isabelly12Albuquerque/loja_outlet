@@ -189,7 +189,7 @@ button.admin-btn:hover { opacity:0.8; }
   <p class="subtitulo">PERFUMES • ELEGÂNCIA • EXCLUSIVIDADE</p>
 
   <div style="text-align:center;">
-    <input id="busca" placeholder="Buscar perfume..." onkeyup="carregar()">
+    <input id="busca" placeholder="Buscar perfume..." onkeyup="carregar()" autocomplete="off">
   </div>
 
   <div class="categorias">
@@ -207,8 +207,8 @@ button.admin-btn:hover { opacity:0.8; }
 <!-- LOGIN ADMIN -->
 <div id="login" class="section">
   <h2>Login Admin</h2>
-  <input id="email" placeholder="Email"><br>
-  <input id="senha" type="password" placeholder="Senha"><br>
+  <input id="email" placeholder="Email" autocomplete="off"><br>
+  <input id="senha" type="password" placeholder="Senha" autocomplete="off"><br>
   <button class="admin-btn" onclick="login()">Entrar</button>
 </div>
 
@@ -217,10 +217,10 @@ button.admin-btn:hover { opacity:0.8; }
 
   <div class="admin-box">
     <h3>Adicionar Produto</h3>
-    <input id="nome" placeholder="Nome">
-    <input id="descricao" placeholder="Descrição">
-    <input id="preco" placeholder="Preço">
-    <input id="imagem" placeholder="URL da imagem">
+    <input id="nome" placeholder="Nome" autocomplete="off">
+    <input id="descricao" placeholder="Descrição" autocomplete="off">
+    <input id="preco" placeholder="Preço" autocomplete="off">
+    <input id="imagem" placeholder="URL da imagem" autocomplete="off">
     <select id="categoria">
       <option value="internacional">Internacional</option>
       <option value="arabes">Árabe</option>
@@ -361,9 +361,9 @@ function carregar(){
       // ADMIN
       admin.innerHTML += `
       <div>
-        <input id="nome_${doc.id}" value="${p.nome}">
-        <input id="preco_${doc.id}" value="${p.preco}">
-        <input id="imagem_${doc.id}" value="${p.imagem}">
+        <input id="nome_${doc.id}" value="${p.nome}" autocomplete="off">
+        <input id="preco_${doc.id}" value="${p.preco}" autocomplete="off">
+        <input id="imagem_${doc.id}" value="${p.imagem}" autocomplete="off">
         <button class="admin-btn" onclick="editar('${doc.id}')">Salvar</button>
         <button class="admin-btn" onclick="deletar('${doc.id}')">Excluir</button>
       </div>
