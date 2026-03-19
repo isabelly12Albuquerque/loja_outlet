@@ -11,6 +11,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
+/* RESET */
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
   font-family: Arial, sans-serif;
@@ -189,7 +190,7 @@ button.admin-btn:hover { opacity:0.8; }
   <p class="subtitulo">PERFUMES • ELEGÂNCIA • EXCLUSIVIDADE</p>
 
   <div style="text-align:center;">
-    <input id="busca" placeholder="Buscar perfume..." onkeyup="carregar()" autocomplete="off">
+    <input id="busca" placeholder="Buscar perfume..." onkeyup="carregar()">
   </div>
 
   <div class="categorias">
@@ -207,8 +208,8 @@ button.admin-btn:hover { opacity:0.8; }
 <!-- LOGIN ADMIN -->
 <div id="login" class="section">
   <h2>Login Admin</h2>
-  <input id="email" placeholder="Email" autocomplete="off"><br>
-  <input id="senha" type="password" placeholder="Senha" autocomplete="off"><br>
+  <input id="email" placeholder="Email"><br>
+  <input id="senha" type="password" placeholder="Senha"><br>
   <button class="admin-btn" onclick="login()">Entrar</button>
 </div>
 
@@ -217,10 +218,10 @@ button.admin-btn:hover { opacity:0.8; }
 
   <div class="admin-box">
     <h3>Adicionar Produto</h3>
-    <input id="nome" placeholder="Nome" autocomplete="off">
-    <input id="descricao" placeholder="Descrição" autocomplete="off">
-    <input id="preco" placeholder="Preço" autocomplete="off">
-    <input id="imagem" placeholder="URL da imagem" autocomplete="off">
+    <input id="nome" placeholder="Nome">
+    <input id="descricao" placeholder="Descrição">
+    <input id="preco" placeholder="Preço">
+    <input id="imagem" placeholder="URL da imagem">
     <select id="categoria">
       <option value="internacional">Internacional</option>
       <option value="arabes">Árabe</option>
@@ -351,7 +352,7 @@ function carregar(){
           <h3>${p.nome}</h3>
           <p>${p.descricao}</p>
           <p class="preco">R$ ${p.preco}</p>
-          <a class="botao" href="https://wa.me/5515997869502?text=Olá,%20tenho%20interesse%20no%20produto:%20${p.nome}" target="_blank">
+          <a class="botao" href="https://wa.me/5515997134418?text=Olá,%20tenho%20interesse%20no%20produto:%20${p.nome}" target="_blank">
             Comprar
           </a>
         </div>
@@ -361,9 +362,9 @@ function carregar(){
       // ADMIN
       admin.innerHTML += `
       <div>
-        <input id="nome_${doc.id}" value="${p.nome}" autocomplete="off">
-        <input id="preco_${doc.id}" value="${p.preco}" autocomplete="off">
-        <input id="imagem_${doc.id}" value="${p.imagem}" autocomplete="off">
+        <input id="nome_${doc.id}" value="${p.nome}">
+        <input id="preco_${doc.id}" value="${p.preco}">
+        <input id="imagem_${doc.id}" value="${p.imagem}">
         <button class="admin-btn" onclick="editar('${doc.id}')">Salvar</button>
         <button class="admin-btn" onclick="deletar('${doc.id}')">Excluir</button>
       </div>
