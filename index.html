@@ -11,16 +11,14 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
-/* RESET */
-* { margin:0; padding:0; box-sizing:border-box; }
 body {
-  font-family: Arial, sans-serif;
+  margin: 0;
+  font-family: Arial;
   background: linear-gradient(180deg, #ffe6ef, #fff);
-  min-height: 100vh;
 }
 
 /* SECTIONS */
-.section { display:none; padding:20px; }
+.section { display:none; }
 .active { display:block; }
 
 /* NAV */
@@ -34,22 +32,23 @@ nav button {
   color: white;
   background: none;
   border: none;
-  margin: 0 10px;
-  font-size: 16px;
+  margin: 10px;
+  font-size: 14px;
   cursor: pointer;
   transition: 0.3s;
 }
 
-nav button:hover { opacity: 0.7; }
+nav button:hover {
+  opacity: 0.7;
+}
 
 /* TITULO */
 .titulo {
   font-family: 'Playfair Display', serif;
   text-align: center;
-  font-size: 60px;
+  font-size: 50px;
   color: #ff4d8d;
   letter-spacing: 3px;
-  margin-bottom:5px;
 }
 
 .subtitulo {
@@ -60,24 +59,23 @@ nav button:hover { opacity: 0.7; }
 
 /* BUSCA */
 #busca {
-  padding: 12px;
-  width: 280px;
+  padding: 10px;
+  width: 250px;
   border-radius: 30px;
   border: none;
   outline: none;
   box-shadow: 0 4px 15px rgba(255,77,141,0.2);
-  margin-bottom: 20px;
 }
 
 /* CATEGORIAS */
 .categorias {
   text-align:center;
-  margin-bottom: 20px;
+  margin:15px;
 }
 
 .categorias button {
-  margin: 6px;
-  padding: 10px 18px;
+  margin: 5px;
+  padding: 8px 14px;
   border-radius: 30px;
   border: none;
   background: #ff4d8d;
@@ -86,42 +84,46 @@ nav button:hover { opacity: 0.7; }
   transition: 0.3s;
 }
 
-.categorias button:hover { background: #e6005c; }
+.categorias button:hover {
+  background: #e6005c;
+}
 
-/* PRODUTOS */
+/* CONTAINER PRODUTOS */
 .container {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  gap: 20px;
+  gap: 15px;
+  padding: 0 15px;
 }
 
+/* CARD PRODUTO */
 .produto {
-  width: 180px;
-  border-radius: 15px;
+  width: 150px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
   transition: 0.3s;
-  background:white;
 }
 
 .produto:hover { transform: scale(1.05); }
 
 .produto img {
   width: 100%;
-  height: 200px;
+  height: 180px;
   object-fit: cover;
   object-position: top;
 }
 
 .produto-info {
-  padding: 10px;
-  text-align:center;
+  padding: 8px;
+  font-size: 13px;
 }
 
-.produto-info h3 { font-size:16px; margin-bottom:5px; }
-.produto-info p { font-size:14px; margin-bottom:5px; color:#555; }
-.preco { font-weight:bold; color:#ff4d8d; }
+.preco {
+  font-weight: bold;
+  color: #ff4d8d;
+}
 
 /* BOTÃO */
 .botao {
@@ -129,54 +131,31 @@ nav button:hover { opacity: 0.7; }
   background: linear-gradient(90deg, #ff4d8d, #ff80ab);
   color:white;
   text-align:center;
-  padding:10px;
-  border-radius:30px;
-  margin-top:10px;
+  padding:7px;
+  border-radius:20px;
+  margin-top:5px;
+  font-size: 12px;
   text-decoration:none;
-  font-weight:bold;
 }
 
 /* ADMIN */
 input, select {
-  padding:10px;
-  margin:5px 0;
-  border-radius:10px;
+  padding:8px;
+  margin:5px;
+  border-radius:8px;
   border:1px solid #ffb3c6;
   background:#fff;
-  width:100%;
 }
-
-button.admin-btn {
-  margin-top:10px;
-  padding:10px;
-  border-radius:20px;
-  border:none;
-  background: linear-gradient(90deg, #ff4d8d, #ff80ab);
-  color:white;
-  cursor:pointer;
-}
-
-button.admin-btn:hover { opacity:0.8; }
 
 .admin-box {
   background:white;
-  padding:20px;
-  border-radius:15px;
-  margin-bottom:20px;
-  box-shadow: 0 5px 15px rgba(255,77,141,0.2);
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:15px;
+  box-shadow: 0 5px 12px rgba(255,77,141,0.2);
 }
-
-/* LISTA ADMIN */
-#listaAdmin div {
-  display:flex;
-  gap:10px;
-  margin-bottom:10px;
-}
-#listaAdmin input { flex:1; }
-#listaAdmin button { flex:0.6; }
 </style>
 </head>
-
 <body>
 
 <nav>
@@ -190,7 +169,7 @@ button.admin-btn:hover { opacity:0.8; }
   <p class="subtitulo">PERFUMES • ELEGÂNCIA • EXCLUSIVIDADE</p>
 
   <div style="text-align:center;">
-    <input id="busca" placeholder="Buscar perfume..." onkeyup="carregar()">
+    <input id="busca" name="busca_perfume" placeholder="Buscar perfume..." onkeyup="carregar()" autocomplete="off">
   </div>
 
   <div class="categorias">
@@ -208,39 +187,36 @@ button.admin-btn:hover { opacity:0.8; }
 <!-- LOGIN ADMIN -->
 <div id="login" class="section">
   <h2>Login Admin</h2>
-  <input id="email" placeholder="Email"><br>
-  <input id="senha" type="password" placeholder="Senha"><br>
-  <button class="admin-btn" onclick="login()">Entrar</button>
+  <input id="admin_email" placeholder="Email" autocomplete="new-password"><br>
+  <input id="admin_senha" type="password" placeholder="Senha" autocomplete="new-password"><br>
+  <button onclick="login()">Entrar</button>
 </div>
 
-<!-- TELA ADMIN -->
+<!-- ADMIN -->
 <div id="admin" class="section">
-
   <div class="admin-box">
     <h3>Adicionar Produto</h3>
-    <input id="nome" placeholder="Nome">
-    <input id="descricao" placeholder="Descrição">
-    <input id="preco" placeholder="Preço">
-    <input id="imagem" placeholder="URL da imagem">
+    <input id="nome" placeholder="Nome" autocomplete="off"><br>
+    <input id="descricao" placeholder="Descrição" autocomplete="off"><br>
+    <input id="preco" placeholder="Preço" autocomplete="off"><br>
+    <input id="imagem" placeholder="URL da imagem" autocomplete="off"><br>
     <select id="categoria">
       <option value="internacional">Internacional</option>
       <option value="arabes">Árabe</option>
       <option value="amadeirado">Amadeirado</option>
       <option value="citrico">Cítrico</option>
       <option value="doce">Doce</option>
-    </select>
-    <button class="admin-btn" onclick="addProduto()">Adicionar Produto</button>
+    </select><br>
+    <button onclick="addProduto()">Adicionar</button>
   </div>
 
   <div class="admin-box">
     <h3>Produtos</h3>
     <div id="listaAdmin"></div>
   </div>
-
 </div>
 
 <script>
-// FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyCjnn8ZT_9N2oTUdhSTlEmG7ZGYy4TCycc",
   authDomain: "outlet-das-marias-c1123.firebaseapp.com",
@@ -250,10 +226,8 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// VARIÁVEIS
 let categoriaAtual = "todos";
 
-// FUNÇÕES
 function abrir(sec){
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById(sec).classList.add('active');
@@ -264,87 +238,61 @@ function filtrar(cat){
   carregar();
 }
 
-// LOGIN ADMIN
 function login(){
-  let email = document.getElementById("email").value;
-  let senha = document.getElementById("senha").value;
+  let email = document.getElementById("admin_email").value;
+  let senha = document.getElementById("admin_senha").value;
 
   auth.signInWithEmailAndPassword(email, senha)
-  .then(async () => {
-    let doc = await db.collection("admins").doc(email).get();
-    if(doc.exists){
-      abrir('admin');
-    } else {
-      alert("Sem permissão");
-    }
-  })
-  .catch(err => alert("Erro no login: " + err.message));
+    .then(async () => {
+      let doc = await db.collection("admins").doc(email).get();
+      if(doc.exists) abrir('admin');
+      else alert("Sem permissão");
+    }).catch(err => alert("Erro: " + err.message));
 }
 
-// ADICIONAR PRODUTO
 function addProduto(){
-  const nomeVal = document.getElementById("nome").value;
-  const descricaoVal = document.getElementById("descricao").value;
-  const precoVal = document.getElementById("preco").value;
-  const imagemVal = document.getElementById("imagem").value;
-  const categoriaVal = document.getElementById("categoria").value;
+  let nomeP = document.getElementById("nome").value.trim();
+  let descP = document.getElementById("descricao").value.trim();
+  let precoP = document.getElementById("preco").value.trim();
+  let imgP = document.getElementById("imagem").value.trim();
+  let catP = document.getElementById("categoria").value;
 
-  if(!nomeVal || !descricaoVal || !precoVal || !imagemVal){
-    alert("Preencha todos os campos!");
+  if(!nomeP || !descP || !precoP || !imgP){
+    alert("Preencha todos os campos");
     return;
   }
 
   db.collection("produtos").add({
-    nome: nomeVal,
-    descricao: descricaoVal,
-    preco: precoVal,
-    imagem: imagemVal,
-    categoria: categoriaVal
-  })
-  .then(() => {
-    alert("Produto adicionado com sucesso!");
+    nome: nomeP,
+    descricao: descP,
+    preco: precoP,
+    imagem: imgP,
+    categoria: catP
+  }).then(() => {
     document.getElementById("nome").value = "";
     document.getElementById("descricao").value = "";
     document.getElementById("preco").value = "";
     document.getElementById("imagem").value = "";
-    document.getElementById("categoria").value = "internacional";
-  })
-  .catch(err => {
-    console.error(err);
-    alert("Erro ao adicionar produto!");
-  });
+  }).catch(err => alert("Erro: " + err.message));
 }
 
-// EDITAR PRODUTO
-function editar(id){
-  db.collection("produtos").doc(id).update({
-    nome: document.getElementById("nome_"+id).value,
-    preco: document.getElementById("preco_"+id).value,
-    imagem: document.getElementById("imagem_"+id).value
-  });
-}
-
-// DELETAR PRODUTO
-function deletar(id){
-  db.collection("produtos").doc(id).delete();
-}
-
-// CARREGAR PRODUTOS
+// Carregar produtos otimizado
 function carregar(){
-  db.collection("produtos").onSnapshot(snapshot => {
-    const loja = document.getElementById("produtos");
-    const admin = document.getElementById("listaAdmin");
-    const busca = document.getElementById("busca")?.value?.toLowerCase() || "";
+  db.collection("produtos").get().then(snapshot => {
+    let loja = document.getElementById("produtos");
+    let admin = document.getElementById("listaAdmin");
+    let busca = document.getElementById("busca")?.value?.toLowerCase() || "";
 
     loja.innerHTML = "";
     admin.innerHTML = "";
 
     snapshot.forEach(doc => {
-      const p = doc.data();
+      let p = doc.data();
+
       if(categoriaAtual != "todos" && p.categoria != categoriaAtual) return;
       if(!p.nome.toLowerCase().includes(busca) && !p.descricao.toLowerCase().includes(busca)) return;
 
-      // LOJA
+      // Loja
       loja.innerHTML += `
       <div class="produto">
         <img src="${p.imagem}">
@@ -352,30 +300,42 @@ function carregar(){
           <h3>${p.nome}</h3>
           <p>${p.descricao}</p>
           <p class="preco">R$ ${p.preco}</p>
-          <a class="botao" href="https://wa.me/5515997134418?text=Olá,%20tenho%20interesse%20no%20produto:%20${p.nome}" target="_blank">
-            Comprar
-          </a>
+          <a class="botao" href="https://wa.me/5515997869502?text=Olá,%20tenho%20interesse%20no%20produto:%20${encodeURIComponent(p.nome)}" target="_blank">Comprar</a>
         </div>
       </div>
       `;
 
-      // ADMIN
+      // Admin
       admin.innerHTML += `
       <div>
-        <input id="nome_${doc.id}" value="${p.nome}">
-        <input id="preco_${doc.id}" value="${p.preco}">
-        <input id="imagem_${doc.id}" value="${p.imagem}">
-        <button class="admin-btn" onclick="editar('${doc.id}')">Salvar</button>
-        <button class="admin-btn" onclick="deletar('${doc.id}')">Excluir</button>
+        <input id="nome_${doc.id}" value="${p.nome}" autocomplete="off">
+        <input id="preco_${doc.id}" value="${p.preco}" autocomplete="off">
+        <input id="imagem_${doc.id}" value="${p.imagem}" autocomplete="off">
+        <button onclick="editar('${doc.id}')">Salvar</button>
+        <button onclick="deletar('${doc.id}')">Excluir</button>
       </div>
       `;
     });
+  }).catch(err => console.error("Erro ao carregar produtos:", err));
+}
+
+function editar(id){
+  let nomeP = document.getElementById("nome_"+id).value.trim();
+  let precoP = document.getElementById("preco_"+id).value.trim();
+  let imgP = document.getElementById("imagem_"+id).value.trim();
+
+  db.collection("produtos").doc(id).update({
+    nome: nomeP,
+    preco: precoP,
+    imagem: imgP
   });
 }
 
-// INICIALIZA
+function deletar(id){
+  db.collection("produtos").doc(id).delete();
+}
+
 carregar();
 </script>
-
 </body>
 </html>
