@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Outlet das Marias</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&display=swap" rel="stylesheet">
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<style>
+body { margin:0; font-family: Arial; background:#fff; }
+
+.section { display:none; }
+.active { display:block; }
+
+nav {
+  background:#000;
+  padding:15px;
+  text-align:center;
+}
+
+nav button {
+  color:#fff;
+  background:none;
+  border:none;
+  margin:8px;
+  cursor:pointer;
+}
+
+.titulo {
+  font-family:'Playfair Display', serif;
+  text-align:center;
+  font-size:50px;
+  color:#ff4d8d;
+}
+
+.categorias {
+  text-align:center;
+  margin:20px;
+}
+
+.categorias button {
+  margin:5px;
+  padding:8px 15px;
+  border:none;
+  border-radius:20px;
+  background:#ff4d8d;
+  color:#fff;
+  cursor:pointer;
+}
+
+.container {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:20px;
+}
+
+.produto {
+  width:220px;
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 4px 15px rgba(0,0,0,0.1);
+  transition:0.3s;
+}
+
+.produto:hover { transform:scale(1.05); }
+
+.produto img {
+  width:100%;
+  height:250px;
+  object-fit:cover;
+}
+
+.produto-info { padding:10px; }
+
+.preco { color:#ff4d8d; font-weight:bold; }
+
+.botao {
+  display:block;
+  background:#000;
+  color:#fff;
+  text-align:center;
+  padding:8px;
+  border-radius:20px;
+  margin-top:10px;
+  text-decoration:none;
+}
+
+input, select {
+  padding:10px;
+  margin:5px;
+  border-radius:10px;
+  border:1px solid #ccc;
+}
+
+.admin-box {
+  background:#ffe6ef;
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:20px;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <button onclick="abrir('loja')">Loja</button>
+  <button onclick="abrir('login')">Admin</button>
+</nav>
+
+<!-- LOJA -->
+<div id="loja" class="section active">
+  <h1 class="titulo">Outlet das Marias</h1>
+
+  <!-- BUSCA -->
+  <div style="text-align:center; margin:20px;">
+    <input type="text" id="busca" placeholder="Buscar perfume..." onkeyup="carregar()" style="width:250px;">
+  </div>
+
+  <!-- CATEGORIAS -->
+  <div class="categorias">
+    <button onclick="filtrar('todos')">Todos</button>
+    <button onclick="filtrar('internacional')">Internacionais</button>
+    <button onclick="filtrar('arabes')">Árabes</button>
+    <button onclick="filtrar('amadeirado')">Amadeirados</button>
+    <button onclick="filtrar('citrico')">Cítricos</button>
+    <button onclick="filtrar('doce')">Doces</button>
+  </div>
+
+  <div id="produtos" class="container"></div>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="section">
+  <h2>Login Admin</h2>
+  <input id="email" placeholder="Email"><br>
+  <input id="senha" type="password" placeholder="Senha"><br>
+  <button onclick="login()">Entrar</button>
+</div>
+
+<!-- ADMIN -->
+<div id="admin" class="section">
+
+  <div class="admin-box">
+    <h3>Adicionar Produto</h3>
+    <input id="nome" placeholder="Nome"><br>
+    <input id="descricao" placeholder="Descrição"><br>
+    <input id="preco" placeholder="Preço"><br>
+    <input id="imagem" placeholder="URL da imagem"><br>
+
+    <select id="categoria">
+      <option value="internacional">Internacional</option>
+      <option value="arabes">Árabe</option>
+      <option value="amadeirado">Amadeirado</option>
+      <option value="citrico">Cítrico</option>
+      <option value="doce">Doce</option>
+    </select><br>
+
+    <button onclick="addProduto()">Adicionar</button>
+  </div>
+
+  <div class="admin-box">
+    <h3>Produtos</h3>
+    <div id="listaAdmin"></div>
+  </div>
+
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCjnn8ZT_9N2oTUdhSTlEmG7ZGYy4TCycc",
+  authDomain: "outlet-das-marias-c1123.firebaseapp.com",
+  projectId: "outlet-das-marias-c1123",
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let categoriaAtual = "todos";
+
+function abrir(sec){
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(sec).classList.add('active');
+}
+
+function filtrar(cat){
+  categoriaAtual = cat;
+  carregar();
+}
+
+function login(){
+  let email = document.getElementById("email").value;
+  let senha = document.getElementById("senha").value;
+
+  auth.signInWithEmailAndPassword(email, senha)
+  .then(async () => {
+    let doc = await db.collection("admins").doc(email).get();
+    if(doc.exists){
+      abrir('admin');
+    } else {
+      alert("Sem permissão");
+    }
+  });
+}
+
+function addProduto(){
+  db.collection("produtos").add({
+    nome: nome.value,
+    descricao: descricao.value,
+    preco: preco.value,
+    imagem: imagem.value,
+    categoria: categoria.value
+  });
+}
+
+function editar(id){
+  let nome = document.getElementById("nome_" + id).value;
+  let preco = document.getElementById("preco_" + id).value;
+  let imagem = document.getElementById("imagem_" + id).value;
+
+  db.collection("produtos").doc(id).update({
+    nome,
+    preco,
+    imagem
+  });
+
+  alert("Atualizado!");
+}
+
+function deletar(id){
+  db.collection("produtos").doc(id).delete();
+}
+
+function carregar(){
+  db.collection("produtos").onSnapshot(snapshot => {
+    let loja = document.getElementById("produtos");
+    let admin = document.getElementById("listaAdmin");
+
+    let busca = document.getElementById("busca")?.value?.toLowerCase() || "";
+
+    loja.innerHTML = "";
+    admin.innerHTML = "";
+
+    snapshot.forEach(doc => {
+      let p = doc.data();
+
+      if(categoriaAtual != "todos" && p.categoria != categoriaAtual) return;
+
+      if(
+        !p.nome.toLowerCase().includes(busca) &&
+        !p.descricao.toLowerCase().includes(busca)
+      ) return;
+
+      // LOJA
+      loja.innerHTML += `
+      <div class="produto">
+        <img src="${p.imagem}">
+        <div class="produto-info">
+          <h3>${p.nome}</h3>
+          <p>${p.descricao}</p>
+          <p class="preco">R$ ${p.preco}</p>
+          <a class="botao" href="https://wa.me/5515997134418?text=Olá,%20tenho%20interesse%20no%20produto:%20${p.nome}%20-%20${p.descricao}%20-%20R$${p.preco}" target="_blank">
+            Comprar
+          </a>
+        </div>
+      </div>
+      `;
+
+      // ADMIN EDITÁVEL
+      admin.innerHTML += `
+      <div style="margin-bottom:10px;">
+        <input id="nome_${doc.id}" value="${p.nome}">
+        <input id="preco_${doc.id}" value="${p.preco}">
+        <input id="imagem_${doc.id}" value="${p.imagem}">
+        <button onclick="editar('${doc.id}')">Salvar</button>
+        <button onclick="deletar('${doc.id}')">Excluir</button>
+      </div>
+      `;
+    });
+  });
+}
+
+carregar();
+</script>
+
+</body>
+</html>
